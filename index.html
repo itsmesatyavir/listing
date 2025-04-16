@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>$PAWS Listing Countdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      color: #222;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .logo {
+      max-width: 120px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+    }
+    h2 {
+      color: #2e8b57;
+    }
+    .countdown {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+    .alert {
+      padding: 10px;
+      background: #ffefc0;
+      border-left: 5px solid #f0ad4e;
+      margin-top: 15px;
+      display: none;
+    }
+    ul {
+      padding-left: 20px;
+      text-align: left;
+    }
+    .telegram {
+      margin-top: 30px;
+      text-align: center;
+      padding: 15px;
+      background: #e6f4ea;
+      border: 2px solid #2e8b57;
+      border-radius: 10px;
+    }
+    .telegram a {
+      text-decoration: none;
+      color: #fff;
+      background: #2e8b57;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- PAWS Token Logo -->
+    <img src="https://academy-public.coinmarketcap.com/optimized-uploads/52c1e137e9cb483ab4b33385334d3ab4.jpeg" alt="$PAWS Logo" class="logo" />
+
+    <h2>$PAWS Listing Countdown</h2>
+    <p><strong>Listing Time (UTC):</strong> April 16, 2025, 11:00 AM</p>
+    <p><strong>Your Local Time:</strong> <span id="localTime"></span></p>
+    <div class="countdown" id="countdown"></div>
+    <div class="alert" id="alertMsg">Get ready! Visit your CEX or the official site to participate in the listing!</div>
+
+    <h3>Major Cities Listing Time:</h3>
+    <ul id="citiesList"></ul>
+
+    <div class="telegram">
+      <p>Join our Telegram for live updates and support:</p>
+      <a href="https://t.me/forestarmy" target="_blank">Join @forestarmy</a>
+    </div>
+  </div>
+
+  <script>
+    const listingUTC = new Date(Date.UTC(2025, 3, 16, 11, 0, 0));
+    document.getElementById("localTime").textContent = listingUTC.toLocaleString();
+
+    const cities = {
+      "New York, USA": "America/New_York",
+      "London, UK": "Europe/London",
+      "Berlin, Germany": "Europe/Berlin",
+      "Dubai, UAE": "Asia/Dubai",
+      "Mumbai, India": "Asia/Kolkata",
+      "Bangkok, Thailand": "Asia/Bangkok",
+      "Hong Kong": "Asia/Hong_Kong",
+      "Tokyo, Japan": "Asia/Tokyo",
+      "Sydney, Australia": "Australia/Sydney",
+      "São Paulo, Brazil": "America/Sao_Paulo",
+      "Cape Town, South Africa": "Africa/Johannesburg"
+    };
+
+    const list = document.getElementById("citiesList");
+    for (const [city, zone] of Object.entries(cities)) {
+      const time = new Intl.DateTimeFormat('en-US', {
+        timeZone: zone,
+        dateStyle: 'full',
+        timeStyle: 'short'
+      }).format(listingUTC);
+      const li = document.createElement("li");
+      li.textContent = `${city}: ${time}`;
+      list.appendChild(li);
+    }
+
+    const countdown = document.getElementById("countdown");
+    const alertBox = document.getElementById("alertMsg");
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = listingUTC - now;
+      if (diff <= 0) {
+        countdown.textContent = "Listing is live!";
+        alertBox.style.display = "none";
+        clearInterval(timer);
+        return;
+      }
+
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+
+      countdown.textContent = `Time left: ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+      if (diff <= 5 * 60 * 1000) {
+        alertBox.style.display = "block";
+      }
+    }
+
+    const timer = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
