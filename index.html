@@ -6,32 +6,89 @@
   <title>Layeredge Listing Countdown</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
       color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background-color: #ffffff;
+      border: 2px solid #4caf50;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
       text-align: center;
-      padding: 50px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #2e7d32;
     }
     .timer {
       font-size: 2em;
+      font-weight: bold;
       margin-top: 20px;
+      color: #1b5e20;
     }
     .info {
-      margin-top: 40px;
-      font-size: 1.2em;
+      margin-top: 30px;
+      font-size: 1.1em;
+      color: #444;
+    }
+    .info p {
+      margin: 10px 0;
+    }
+    .telegram-button {
+      margin-top: 30px;
+      display: inline-flex;
+      align-items: center;
+      background-color: #0088cc;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background 0.3s;
+    }
+    .telegram-button:hover {
+      background-color: #0075b6;
+    }
+    .telegram-button img {
+      height: 20px;
+      margin-right: 10px;
+    }
+    iframe.twitter-timeline {
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
-  <h1>🚀 Layeredge ($EDGEN) Listing Countdown</h1>
-  <div class="timer" id="countdown"></div>
-  <div class="info">
-    <p>Your Local Time: <span id="localTime"></span></p>
-    <p>Your Approximate Location: <span id="location"></span></p>
+
+  <div class="container">
+    <h1>🚀 Layeredge ($EDGEN) Listing Countdown</h1>
+    <div class="timer" id="countdown"></div>
+    <div class="info">
+      <p>🕒 Your Local Time: <span id="localTime"></span></p>
+      <p>📍 Your Location: <span id="location"></span></p>
+    </div>
+    <a class="telegram-button" href="https://t.me/forestarmy" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram Logo">
+      Join Forestarmy on Telegram
+    </a>
   </div>
 
+  <!-- LayerEdge X timeline -->
+  <a class="twitter-timeline" data-height="500" href="https://twitter.com/LayerEdgeHQ?ref_src=twsrc%5Etfw">Tweets by LayerEdgeHQ</a> 
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
   <script>
-    // Countdown to June 2, 2025, 10:30 UTC
     const listingDate = new Date("2025-06-02T10:30:00Z").getTime();
 
     const countdownInterval = setInterval(() => {
@@ -50,16 +107,14 @@
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       document.getElementById("countdown").innerHTML =
-        `${days}d ${hours}h ${minutes}m ${seconds}s left until listing`;
+        `${days}d ${hours}h ${minutes}m ${seconds}s left`;
     }, 1000);
 
-    // Show local time
     setInterval(() => {
       const now = new Date();
       document.getElementById("localTime").innerText = now.toLocaleString();
     }, 1000);
 
-    // Fetch user location
     fetch("https://ipapi.co/json")
       .then(res => res.json())
       .then(data => {
