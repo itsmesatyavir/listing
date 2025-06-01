@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layeredge Listing Countdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      text-align: center;
+      padding: 50px;
+    }
+    .timer {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+    .info {
+      margin-top: 40px;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 Layeredge ($EDGEN) Listing Countdown</h1>
+  <div class="timer" id="countdown"></div>
+  <div class="info">
+    <p>Your Local Time: <span id="localTime"></span></p>
+    <p>Your Approximate Location: <span id="location"></span></p>
+  </div>
+
+  <script>
+    // Countdown to June 2, 2025, 10:30 UTC
+    const listingDate = new Date("2025-06-02T10:30:00Z").getTime();
+
+    const countdownInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = listingDate - now;
+
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById("countdown").innerHTML = "✅ Layeredge is now listed!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerHTML =
+        `${days}d ${hours}h ${minutes}m ${seconds}s left until listing`;
+    }, 1000);
+
+    // Show local time
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById("localTime").innerText = now.toLocaleString();
+    }, 1000);
+
+    // Fetch user location
+    fetch("https://ipapi.co/json")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("location").innerText = `${data.city}, ${data.country_name}`;
+      })
+      .catch(() => {
+        document.getElementById("location").innerText = "Unavailable";
+      });
+  </script>
+</body>
+</html>
