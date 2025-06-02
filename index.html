@@ -2,139 +2,154 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Layeredge Listing Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>$EDGEN Listing Countdown</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #ffffff);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      color: #222;
       padding: 20px;
+      margin: 0;
     }
     .container {
-      background-color: #ffffff;
-      border: 2px solid #4caf50;
-      border-radius: 20px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-      padding: 30px;
-      max-width: 600px;
-      width: 100%;
+      max-width: 650px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       text-align: center;
-      margin-bottom: 20px;
     }
-    h1 {
-      color: #2e7d32;
+    .logo {
+      width: 120px;
+      border-radius: 20px;
+      margin-bottom: 15px;
     }
-    .timer {
-      font-size: 2em;
+    h2 {
+      color: #2e8b57;
+      margin-bottom: 10px;
+    }
+    .countdown {
+      font-size: 1.6em;
+      margin-bottom: 10px;
       font-weight: bold;
-      margin-top: 20px;
-      color: #1b5e20;
     }
-    .info {
+    .alert {
+      padding: 10px;
+      background: #fff3cd;
+      border-left: 5px solid #ffc107;
+      margin-top: 15px;
+      display: none;
+      border-radius: 6px;
+    }
+    ul {
+      padding-left: 20px;
+      text-align: left;
+    }
+    .telegram {
       margin-top: 30px;
-      font-size: 1.1em;
-      color: #444;
+      text-align: center;
+      padding: 15px;
+      background: #e6f4ea;
+      border: 2px solid #2e8b57;
+      border-radius: 10px;
     }
-    .info p {
-      margin: 10px 0;
-    }
-    .telegram-button {
-      margin-top: 30px;
-      display: inline-flex;
-      align-items: center;
-      background-color: #0088cc;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 30px;
+    .telegram a {
       text-decoration: none;
+      color: #fff;
+      background: #2e8b57;
+      padding: 10px 20px;
+      border-radius: 5px;
       font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: background 0.3s;
-    }
-    .telegram-button:hover {
-      background-color: #0075b6;
-    }
-    .telegram-button img {
-      height: 20px;
-      margin-right: 10px;
-    }
-    iframe.twitter-timeline {
-      border-radius: 15px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-      margin-top: 30px;
+      display: inline-block;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <h1> Temporary 🚀 Layeredge ($EDGEN) Listing Countdown</h1>
-    <div class="timer" id="countdown"></div>
-    <div class="info">
-      <p>🕒 Your Local Time: <span id="localTime"></span></p>
-      <p>📍 Your Location: <span id="location"></span></p>
-      <p>📢 Listing Time in Your Timezone: <span id="localListingTime"></span></p>
+    <!-- EDGEN Logo (Replace with actual if available) -->
+    <img src="https://layeredge.io/_next/image?url=https%3A%2F%2Fd3b1ytuf3cg77l.cloudfront.net%2Fimg%2Flifecycle.png&w=1920&q=100" alt="EDGEN Logo" class="logo" />
+
+    <h2>$EDGEN Listing Countdown</h2>
+    <p><strong>Listing Time (UTC):</strong> June 2, 2025, 10:30 AM</p>
+    <p><strong>Your Local Time:</strong> <span id="localTime"></span></p>
+    <div class="countdown" id="countdown"></div>
+    <div class="alert" id="alertMsg">Get ready! Visit the LayerEdge dashboard or exchange to participate in the listing!</div>
+
+    <h3>Major Cities Listing Time:</h3>
+    <ul id="citiesList"></ul>
+
+    <div class="telegram">
+      <p>Join our Telegram for live updates and support:</p>
+      <a href="https://t.me/forestarmy" target="_blank">Join @forestarmy</a>
     </div>
-    <a class="telegram-button" href="https://t.me/forestarmy" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram Logo">
-      Join Forestarmy on Telegram
-    </a>
   </div>
 
-  <!-- LayerEdge X (Twitter) timeline -->
-  <a class="twitter-timeline" data-height="500" href="https://twitter.com/LayerEdgeHQ?ref_src=twsrc%5Etfw">Tweets by LayerEdgeHQ</a> 
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
   <script>
-    // Countdown Timer
-    const listingDate = new Date("2025-06-02T10:30:00Z").getTime();
+    const listingUTC = new Date(Date.UTC(2025, 5, 2, 10, 30, 0)); // June 2, 10:30 AM UTC
+    const localTimeSpan = document.getElementById("localTime");
 
-    const countdownInterval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = listingDate - now;
+    function updateLocalTime() {
+      localTimeSpan.textContent = new Date().toLocaleString();
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
 
-      if (distance < 0) {
-        clearInterval(countdownInterval);
-        document.getElementById("countdown").innerHTML = "✅ Layeredge is now listed!";
+    const cities = {
+      "New York, USA": "America/New_York",
+      "London, UK": "Europe/London",
+      "Berlin, Germany": "Europe/Berlin",
+      "Dubai, UAE": "Asia/Dubai",
+      "Mumbai, India": "Asia/Kolkata",
+      "Bangkok, Thailand": "Asia/Bangkok",
+      "Hong Kong": "Asia/Hong_Kong",
+      "Tokyo, Japan": "Asia/Tokyo",
+      "Sydney, Australia": "Australia/Sydney",
+      "São Paulo, Brazil": "America/Sao_Paulo",
+      "Cape Town, South Africa": "Africa/Johannesburg"
+    };
+
+    const list = document.getElementById("citiesList");
+    for (const [city, zone] of Object.entries(cities)) {
+      const time = new Intl.DateTimeFormat('en-US', {
+        timeZone: zone,
+        dateStyle: 'full',
+        timeStyle: 'short'
+      }).format(listingUTC);
+      const li = document.createElement("li");
+      li.textContent = `${city}: ${time}`;
+      list.appendChild(li);
+    }
+
+    const countdown = document.getElementById("countdown");
+    const alertBox = document.getElementById("alertMsg");
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = listingUTC - now;
+      if (diff <= 0) {
+        countdown.textContent = "🎉 Listing is LIVE!";
+        alertBox.style.display = "block";
+        clearInterval(timer);
         return;
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
-      document.getElementById("countdown").innerHTML =
-        `${days}d ${hours}h ${minutes}m ${seconds}s left`;
-    }, 1000);
+      countdown.textContent = `⏳ ${days}d ${hours}h ${minutes}m ${seconds}s left`;
 
-    // Local time display
-    setInterval(() => {
-      const now = new Date();
-      document.getElementById("localTime").innerText = now.toLocaleString();
-    }, 1000);
+      if (diff <= 5 * 60 * 1000) {
+        alertBox.style.display = "block";
+      }
+    }
 
-    // Location
-    fetch("https://ipapi.co/json")
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("location").innerText = `${data.city}, ${data.country_name}`;
-      })
-      .catch(() => {
-        document.getElementById("location").innerText = "Unavailable";
-      });
-
-    // Localized Listing Time
-    const localListing = new Date("2025-06-02T10:30:00Z");
-    document.getElementById("localListingTime").innerText = localListing.toLocaleString(undefined, {
-      dateStyle: "full",
-      timeStyle: "short",
-      timeZoneName: "short"
-    });
+    const timer = setInterval(updateCountdown, 1000);
+    updateCountdown();
   </script>
 </body>
 </html>
